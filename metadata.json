@@ -1,0 +1,6 @@
+{
+  "name": "Crispy Corner",
+  "description": "Modern and professional fast-food restaurant website with dynamic menu, shopping cart, and online ordering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

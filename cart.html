@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart | Crispy Corner{% endblock %}
+
+{% block content %}
+<div class="page-header-banner">
+  <div class="container text-center">
+    <span class="page-tag"><i class="fa-solid fa-basket-shopping"></i> YOUR SELECTION</span>
+    <h1 class="page-title">Your Food Cart</h1>
+    <p class="page-subtitle">Review your delicious items, adjust quantities, and get ready for the crunch!</p>
+  </div>
+</div>
+
+<div class="container cart-page-container">
+  <!-- Free Delivery Progress Bar -->
+  <div class="free-delivery-card" id="free-delivery-banner">
+    <div class="delivery-progress-header">
+      <div class="delivery-progress-text" id="free-delivery-message">
+        <i class="fa-solid fa-truck-fast text-accent"></i>
+        <span>Add items to qualify for <strong>FREE Delivery</strong> (Orders over Rs. 2,000)</span>
+      </div>
+      <span class="delivery-threshold-tag">Threshold: Rs. 2,000</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="free-delivery-progress-bar" style="width: 0%;"></div>
+    </div>
+  </div>
+
+  <div class="cart-layout-grid" id="cart-content-wrapper">
+    <!-- Left: Cart Items List -->
+    <div class="cart-items-column">
+      <div class="cart-table-card">
+        <div class="cart-table-header">
+          <h2 class="cart-box-title">Order Items (<span id="cart-total-items-heading">0</span>)</h2>
+          <button class="clear-cart-btn" onclick="clearCart()" id="clear-cart-btn" title="Remove all items">
+            <i class="fa-solid fa-trash-can"></i> Clear Cart
+          </button>
+        </div>
+
+        <!-- Dynamic Cart Items Container -->
+        <div class="cart-items-list" id="cart-items-container">
+          <!-- Populated by static/js/script.js -->
+        </div>
+      </div>
+
+      <!-- Cooking Instructions / Special Requests -->
+      <div class="cart-instructions-card">
+        <h3 class="instructions-title"><i class="fa-regular fa-comment-dots"></i> Special Order Instructions</h3>
+        <p class="instructions-sub">Extra napkins? Less ice in drinks? Let our kitchen crew know:</p>
+        <textarea 
+          id="cart-special-instructions" 
+          class="form-textarea" 
+          rows="2" 
+          placeholder="E.g., Please make the Zinger extra crispy, keep garlic mayo separate..."
+        ></textarea>
+      </div>
+
+      <div class="continue-shopping-row">
+        <a href="/menu" class="btn btn-outline">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Continue Ordering</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: Order Summary Sidebar -->
+    <div class="cart-summary-column">
+      <div class="order-summary-card">
+        <h2 class="summary-title">Order Summary</h2>
+
+        <!-- Promo Code Input -->
+        <div class="promo-box">
+          <div class="promo-input-group">
+            <input 
+              type="text" 
+              id="promo-input" 
+              class="promo-input" 
+              placeholder="Promo code (e.g. CRUNCH10)"
+              uppercase
+            >
+            <button class="btn btn-secondary promo-apply-btn" onclick="applyPromoCode()">Apply</button>
+          </div>
+          <div id="promo-message" class="promo-message"></div>
+        </div>
+
+        <!-- Cost Breakdown -->
+        <div class="summary-breakdown">
+          <div class="summary-row">
+            <span class="summary-label">Items Subtotal:</span>
+            <span class="summary-value" id="cart-subtotal">Rs. 0</span>
+          </div>
+
+          <div class="summary-row discount-row" id="discount-row" style="display: none;">
+            <span class="summary-label">Promo Discount (<span id="discount-percent">0</span>%):</span>
+            <span class="summary-value text-success" id="cart-discount">-Rs. 0</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Delivery Fee:</span>
+            <span class="summary-value" id="cart-delivery">Rs. 150</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row total-row">
+            <span class="summary-label">Total Amount:</span>
+            <span class="summary-value text-accent" id="cart-grand-total">Rs. 0</span>
+          </div>
+          <p class="tax-note">All taxes included. No hidden charges.</p>
+        </div>
+
+        <!-- Proceed to Checkout Button -->
+        <div class="checkout-btn-wrap">
+          <a href="/checkout" class="btn btn-primary btn-lg btn-block btn-glow" id="proceed-checkout-btn">
+            <span>Proceed to Checkout</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="summary-guarantees">
+          <div class="guarantee-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Safe & Secure Fast Checkout</span>
+          </div>
+          <div class="guarantee-item">
+            <i class="fa-solid fa-motorcycle"></i>
+            <span>Live delivery tracking via SMS/WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Cart State -->
+  <div class="empty-cart-state" id="empty-cart-view" style="display: none;">
+    <div class="empty-cart-icon">
+      <i class="fa-solid fa-basket-shopping"></i>
+    </div>
+    <h2 class="empty-title">Your Cart is Currently Empty</h2>
+    <p class="empty-sub">Looks like you haven't added any crunchy burgers or crispy chicken yet!</p>
+    <a href="/menu" class="btn btn-primary btn-lg btn-glow">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Explore Our Menu</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us & Locations | Crispy Corner Fast Food{% endblock %}
+
+{% block content %}
+<div class="page-header-banner">
+  <div class="container text-center">
+    <span class="page-tag"><i class="fa-solid fa-headset"></i> GET IN TOUCH</span>
+    <h1 class="page-title">We'd Love To Hear From You</h1>
+    <p class="page-subtitle">Have a question about your order, catering request, or feedback? The Crunch Crew is ready to help!</p>
+  </div>
+</div>
+
+<div class="container contact-page-container">
+
+  <!-- Success Notification if submitted via POST -->
+  {% if success_msg %}
+    <div class="contact-success-alert animate-fade-in">
+      <i class="fa-solid fa-circle-check"></i>
+      <div>
+        <h4>Message Sent Successfully!</h4>
+        <p>{{ success_msg }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Quick Info Cards Row -->
+  <div class="contact-info-grid">
+    <div class="info-card">
+      <div class="info-icon-box"><i class="fa-solid fa-phone"></i></div>
+      <h3>Call Center & Helpline</h3>
+      <p class="info-highlight">042-111-CRUNCH (278624)</p>
+      <p class="info-sub">Direct telephone ordering & delivery status</p>
+      <a href="tel:+9242111278624" class="info-link">Call Now &rarr;</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon-box"><i class="fa-solid fa-envelope"></i></div>
+      <h3>Email Support</h3>
+      <p class="info-highlight">support@crunchbite.pk</p>
+      <p class="info-sub">Business inquiries, feedback & partnerships</p>
+      <a href="mailto:support@crunchbite.pk" class="info-link">Send Email &rarr;</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon-box"><i class="fa-solid fa-location-dot"></i></div>
+      <h3>Flagship Restaurant</h3>
+      <p class="info-highlight">MM Alam Road, Gulberg III</p>
+      <p class="info-sub">Lahore, Punjab 54000, Pakistan</p>
+      <a href="#maps-section" class="info-link">View On Map &rarr;</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon-box"><i class="fa-solid fa-clock"></i></div>
+      <h3>Opening Hours</h3>
+      <p class="info-highlight">11:00 AM – 03:00 AM</p>
+      <p class="info-sub">Open 7 days a week (Late night delivery)</p>
+      <span class="status-open-badge"><span class="pulse-green"></span> Now Open</span>
+    </div>
+  </div>
+
+  <!-- Contact Form & Map Section -->
+  <div class="contact-main-grid">
+    <!-- Left: Contact Form -->
+    <div class="contact-form-card">
+      <div class="form-card-header">
+        <span class="section-tag">SEND US A MESSAGE</span>
+        <h2 class="form-title">Drop Your Query or Feedback</h2>
+        <p class="form-desc">Fill out the form below and our team will get back to you within a few hours.</p>
+      </div>
+
+      <form id="contact-form" method="POST" action="/contact" onsubmit="handleContactSubmit(event)">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="contact-name" class="form-label">Your Name <span class="text-danger">*</span></label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="Muhammad Ali" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label">Email Address <span class="text-danger">*</span></label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-envelope input-icon"></i>
+              <input type="email" id="contact-email" name="email" class="form-input" placeholder="ali@example.com" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="contact-phone" class="form-label">Phone Number</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-phone input-icon"></i>
+              <input type="tel" id="contact-phone" name="phone" class="form-input" placeholder="0300-1234567">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject" class="form-label">Subject <span class="text-danger">*</span></label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-tag input-icon"></i>
+              <select id="contact-subject" name="subject" class="form-select" required>
+                <option value="General Inquiry" selected>General Inquiry</option>
+                <option value="Order Status / Issue">Order Status / Delivery Issue</option>
+                <option value="Catering & Parties">Catering & Birthday Parties</option>
+                <option value="Franchise Opportunity">Franchise Opportunities</option>
+                <option value="Food Quality Feedback">Food Quality & Taste Feedback</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-message" class="form-label">Your Message <span class="text-danger">*</span></label>
+          <textarea id="contact-message" name="message" class="form-textarea" rows="4" placeholder="Tell us how we can help you..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-glow" id="contact-submit-btn">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Send Message</span>
+        </button>
+      </form>
+
+      <div class="social-connect-strip">
+        <span>Connect With Us:</span>
+        <div class="social-pills">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-pill"><i class="fa-brands fa-instagram"></i> Instagram</a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-pill"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-pill"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+          <a href="https://wa.me/9242111278624" target="_blank" rel="noopener noreferrer" class="social-pill whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Map Placeholder & Branch Details -->
+    <div class="contact-map-column" id="maps-section">
+      <div class="map-card">
+        <div class="map-header">
+          <h3 class="map-title"><i class="fa-solid fa-map-location-dot text-accent"></i> Flagship Store Location</h3>
+          <span class="badge-accent">Dine-In & Takeaway</span>
+        </div>
+
+        <!-- Google Maps Styled Placeholder Container -->
+        <div class="map-container-mock">
+          <div class="map-visual-background">
+            <div class="map-road-grid"></div>
+            <!-- Custom Location Pin Pinpoint -->
+            <div class="map-marker-pin">
+              <div class="pin-pulse"></div>
+              <div class="pin-icon-box">
+                <i class="fa-solid fa-burger"></i>
+              </div>
+              <div class="pin-label">
+                <strong>Crispy Corner Lahore</strong>
+                <span>MM Alam Road, Gulberg III</span>
+              </div>
+            </div>
+          </div>
+          <div class="map-overlay-info">
+            <p><i class="fa-solid fa-circle-check text-success"></i> Free parking available &bull; Outdoor seating available</p>
+            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">
+              <i class="fa-solid fa-diamond-turn-right"></i> Open In Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Branches List Accordion -->
+        <div class="branches-box">
+          <h4 class="branches-title">Our Lahore Outlets</h4>
+          <div class="branches-list">
+            <div class="branch-item">
+              <strong>1. Gulberg III Flagship:</strong> MM Alam Road (Dine-in, Takeaway & Delivery)
+            </div>
+            <div class="branch-item">
+              <strong>2. DHA Phase 5:</strong> Commercial Broadway Sector C (Express Delivery & Takeaway)
+            </div>
+            <div class="branch-item">
+              <strong>3. Johar Town:</strong> G-1 Market, Near Doctors Hospital (Dine-in & Delivery)
+            </div>
+            <div class="branch-item">
+              <strong>4. Bahria Town:</strong> Sector C Commercial Zone (Express Drive-thru)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frequently Asked Questions -->
+  <section class="faq-section">
+    <div class="section-header text-center">
+      <span class="section-tag">COMMON QUESTIONS</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4><i class="fa-solid fa-question text-accent"></i> What is your average delivery time?</h4>
+        <p>Our average delivery time across Lahore, Karachi, and Islamabad is 30 to 40 minutes. All food travels in thermal insulated boxes to stay hot and crispy.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4><i class="fa-solid fa-question text-accent"></i> What payment methods are accepted?</h4>
+        <p>We accept Cash on Delivery (COD), JazzCash, EasyPaisa, and major Visa/Mastercard debit and credit cards.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4><i class="fa-solid fa-question text-accent"></i> Is your food 100% Halal?</h4>
+        <p>Yes, absolutely! All our meats, oils, and ingredients are strictly 100% Halal certified and sourced daily from reputable suppliers.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4><i class="fa-solid fa-question text-accent"></i> Can I customize my burger or wrap?</h4>
+        <p>Yes! Simply add your instructions (e.g. extra sauce, no pickles, extra cheese) in the "Special Instructions" box on the Cart page.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

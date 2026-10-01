@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Crispy Corner Menu | Crispy Burgers, Fried Chicken, Pizza & More{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner -->
+<div class="page-header-banner">
+  <div class="container text-center">
+    <span class="page-tag"><i class="fa-solid fa-utensils"></i> OUR DELICIOUS MENU</span>
+    <h1 class="page-title">Crave-Worthy Fast Food</h1>
+    <p class="page-subtitle">Handcrafted burgers, extra-crispy chicken, loaded fries, and stone-baked pizza made fresh on order.</p>
+  </div>
+</div>
+
+<div class="container menu-page-container">
+  <!-- Menu Search & Filter Control Bar -->
+  <div class="menu-controls-wrapper">
+    <!-- Live Search Bar -->
+    <div class="search-input-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input 
+        type="text" 
+        id="menu-search-input" 
+        class="search-input" 
+        placeholder="Search burgers, fries, pizza, drinks..."
+        value="{{ search_query }}"
+        autocomplete="off"
+      >
+      <button id="search-clear-btn" class="search-clear-btn" style="display: none;" title="Clear search">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="category-tabs-scroll">
+      <div class="category-tabs-group" id="category-tabs" role="tablist">
+        {% for cat in categories %}
+          <button 
+            type="button" 
+            class="cat-tab-btn {% if cat.id == selected_category or (not selected_category and cat.id == 'all') %}active{% endif %}" 
+            data-category="{{ cat.id }}"
+            role="tab"
+          >
+            <i class="fa-solid {{ cat.icon }}"></i>
+            <span>{{ cat.name }}</span>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filter Status & Item Count -->
+  <div class="filter-status-bar">
+    <div class="filter-count">
+      Showing <strong id="visible-items-count">{{ products|length }}</strong> delicious items
+    </div>
+    <div class="filter-sort">
+      <label for="menu-sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
+      <select id="menu-sort-select" class="sort-select">
+        <option value="featured">Featured / Popular</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Menu Products Grid -->
+  <div class="products-grid" id="menu-products-grid">
+    {% for product in products %}
+      <div 
+        class="product-card" 
+        id="product-{{ product.id }}" 
+        data-id="{{ product.id }}"
+        data-category="{{ product.category }}"
+        data-name="{{ product.name|lower }}"
+        data-price="{{ product.price }}"
+        data-rating="{{ product.rating }}"
+      >
+        <div class="product-img-wrapper">
+          <img 
+            src="{{ product.image }}" 
+            alt="{{ product.name }}" 
+            class="product-image"
+            loading="lazy"
+          >
+          {% if product.badge %}
+            <span class="product-badge">{{ product.badge }}</span>
+          {% endif %}
+          {% if product.spicy %}
+            <span class="product-spice-badge" title="Fiery Fast Food"><i class="fa-solid fa-pepper-hot"></i> Spicy</span>
+          {% endif %}
+          <div class="prep-time-tag">
+            <i class="fa-regular fa-clock"></i> {{ product.prep_time }}
+          </div>
+          <button 
+            class="quick-view-btn" 
+            onclick="showProductModal('{{ product.id }}')"
+            aria-label="Quick view {{ product.name }}"
+          >
+            <i class="fa-solid fa-eye"></i> Quick View
+          </button>
+        </div>
+
+        <div class="product-info">
+          <div class="product-meta">
+            <span class="product-category-label">{{ product.category_name }}</span>
+            <div class="product-rating">
+              <i class="fa-solid fa-star"></i>
+              <span>{{ product.rating }}</span>
+              <small>({{ product.reviews }})</small>
+            </div>
+          </div>
+
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-desc">{{ product.description }}</p>
+
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="price-currency">Rs.</span>
+              <span class="price-amount">{{ product.price }}</span>
+            </div>
+
+            <!-- Quantity & Add Button -->
+            <div class="add-to-cart-wrapper">
+              <button 
+                type="button"
+                class="btn btn-primary btn-sm add-to-cart-btn" 
+                data-id="{{ product.id }}"
+                data-name="{{ product.name }}"
+                data-price="{{ product.price }}"
+                data-image="{{ product.image }}"
+                data-category="{{ product.category_name }}"
+                onclick="addToCart(this)"
+              >
+                <i class="fa-solid fa-plus"></i>
+                <span>Add to Cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Empty Search Results State -->
+  <div class="empty-search-state" id="empty-search-state" style="display: none;">
+    <div class="empty-icon"><i class="fa-solid fa-burger"></i></div>
+    <h3>No Yummy Food Found</h3>
+    <p>We couldn't find any dish matching your search. Try another delicious keyword or reset filters.</p>
+    <button class="btn btn-outline" onclick="resetFilters()">Reset All Filters</button>
+  </div>
+</div>
+
+<!-- Floating Bottom Quick Cart on Mobile -->
+<div class="mobile-sticky-cart-bar" id="mobile-cart-bar" style="display: none;">
+  <div class="sticky-cart-info">
+    <span class="sticky-cart-count" id="mobile-cart-bar-count">0 items</span>
+    <span class="sticky-cart-total" id="mobile-cart-bar-total">Rs. 0</span>
+  </div>
+  <a href="/cart" class="btn btn-primary btn-sm">
+    <span>View Cart</span>
+    <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- Quick View Modal Structure -->
+<div id="product-modal" class="modal-backdrop" onclick="closeProductModal(event)">
+  <div class="modal-container" id="modal-container" onclick="event.stopPropagation()">
+    <button class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+    <div class="modal-body" id="modal-content">
+      <!-- Dynamic via JS -->
+    </div>
+  </div>
+</div>
+{% endblock %}
